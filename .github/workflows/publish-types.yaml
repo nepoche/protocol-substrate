@@ -20,5 +20,9 @@ jobs:
       - uses: actions/checkout@v2
       - name: Change into types package
         run: cd types
-      - name: Publish the packages
-        run: yarn publish-types
+      - name: Run a build
+        run: yarn build
+      - name: Do a patch update for the package
+        run: yarn --version patch
+      - name: Publish the package
+        run: npm publish --access public

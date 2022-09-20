@@ -46,40 +46,11 @@ const copySync = (src, dst) => {
 
 const execSync = (cmd) => _execSync(cmd, { stdio: 'inherit' });
 
-function runClean() {
-  execSync('yarn polkadot-dev-clean-build');
-}
-
-function runCheck() {
-  execSync('yarn lint');
-}
-
-function runBuild() {
-  execSync('yarn build');
-}
-
-function runTest() {
-  execSync('yarn test');
-}
-
-
 function npmGetVersion() {
   return JSON.parse(fs.readFileSync(path.resolve(process.cwd(), 'package.json'), 'utf8')).version;
 }
 
-function npmSetup() {
-  const registry = 'registry.npmjs.org';
-
-  fs.writeFileSync(path.join(os.homedir(), '.npmrc'), `//${registry}/:_authToken=${process.env.NPM_TOKEN}`);
-}
-
 function npmPublish() {
-  if (fs.existsSync('.skip-npm')) {
-    return;
-  }
-
-  // Before publishing, copy the package.json with updated versions from the root
-  // package folder and into the root of the published ('build') folder
   rimraf.sync('build/package.json');
 
   // take the package.json defined in the module and strip out the '/build/'
@@ -96,10 +67,7 @@ function npmPublish() {
 
   ['LICENSE', 'README.md'].forEach((file) => copySync(file, 'build'));
   fs.writeFileSync('./build/package.json', newPkgString);
-  console.log('args', process.argv);
-
   process.chdir('build');
-
   const tag = npmGetVersion().includes('-') ? '--tag beta' : '';
   let count = 1;
 
@@ -122,51 +90,6 @@ function npmPublish() {
       }
     }
   }
-
-  process.chdir('..');
 }
 
-function gitSetup() {
-  execSync('git config push.default simple');
-  execSync('git config merge.ours.driver true');
-  execSync('git config user.name "Github Actions"');
-  execSync('git config user.email "action@github.com"');
-  execSync('git checkout master');
-}
-
-function gitBump() {
-  const currentVersion = npmGetVersion();
-  const [version, tag] = currentVersion.split('-');
-  const [,, patch] = version.split('.');
-
-  if (tag) {
-    // if we have a beta version, just continue the stream of betas
-    execSync(`${path.join(__dirname, 'update-version.cjs')} prerelease`);
-  } else if (argv['skip-beta']) {
-    // don't allow beta versions
-    execSync(`${path.join(__dirname, 'update-version.cjs')} patch`);
-  } else if (patch === '0') {
-    // patch is .0, so publish this as an actual release (surely we did our job on beta)
-    execSync(`${path.join(__dirname, 'update-version.cjs')} patch`);
-  } else if (patch === '1') {
-    // continue with first new minor as beta
-    execSync(`${path.join(__dirname, 'update-version.cjs')} prerelease`);
-  } else {
-    // manual setting of version, make some changes so we can commit
-    fs.appendFileSync(path.join(process.cwd(), '.123trigger'), currentVersion);
-  }
-
-  execSync('git add --all .');
-}
-
-gitSetup();
-gitBump();
-npmSetup();
-
-runClean();
-runCheck();
-runBuild();
-runTest();
-
-gitPush();
 npmPublish();
