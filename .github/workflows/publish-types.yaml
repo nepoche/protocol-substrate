@@ -1,0 +1,24 @@
+name: Publish new types package on changes
+
+# If changes are made to the types/src folder,
+# run this action which will patch-bump (+x.x.1)
+# the package and publish the version.
+on:
+  push:
+    branches:
+    - main
+    paths:
+    - types/src
+
+jobs:
+  build: 
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v2
+      - name: Change into types package
+        run: cd types
+      - name: Publish the packages
+        run: yarn publish-types
