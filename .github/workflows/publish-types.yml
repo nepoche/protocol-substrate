@@ -8,7 +8,7 @@ on:
     branches:
     - main
     paths:
-    - "types/*"
+    - "types/src/*"
 
 jobs:
   build:
@@ -40,6 +40,6 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Commit & Push changes
-        uses: actions-js/push@master
+        uses: actions-js/push@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
