@@ -15,7 +15,7 @@ yarn update:metadata
 yarn build:interfaces
 ```
 
-### Building the types package
+### Building the package
 
 After updating the types, run a build for the package with
 ```
