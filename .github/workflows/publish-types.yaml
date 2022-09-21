@@ -11,7 +11,8 @@ on:
     - types
 
 jobs:
-  build: 
+  build:
+    name: Publish Types
     runs-on: ubuntu-latest
     permissions:
       packages: write
