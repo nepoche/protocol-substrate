@@ -27,10 +27,14 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - name: Install npm dependencies
         run: cd types && yarn install
-      - name: Run a build
-        run: cd types && yarn build
+      - name: Configure Github Actions user
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "Github Actions"
       - name: Do a patch update for the package
         run: cd types && yarn version --patch
+      - name: Run a build
+        run: cd types && yarn build
       # - name: Create Pull Request
       #   uses: peter-evans/create-pull-request@v4
       - name: Publish the package
