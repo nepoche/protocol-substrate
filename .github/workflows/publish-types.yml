@@ -18,10 +18,9 @@ jobs:
       packages: write
       contents: read
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@main
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-        run: git checkout main
       - uses: actions/setup-node@v3
         with:
           node-version: '16.x'
@@ -36,8 +35,6 @@ jobs:
         run: cd types && yarn version --patch
       - name: Run a build
         run: cd types && yarn build
-      # - name: Create Pull Request
-      #   uses: peter-evans/create-pull-request@v4
       - name: Publish the package
         run: cd types && yarn publish-types
         env:
