@@ -1,16 +1,15 @@
-# If changes are made to the types package.json,
-# Issue a new release to npm for the types package.
-
+# If changes are made to the types/src folder,
+# Create a pull request to bump the package.json 
 on:
   push:
     branches:
     - main
     paths:
-    - "types/package.json"
+    - "types/src/*"
 
 jobs:
   build:
-    name: Publish Types
+    name: Bump types package
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -29,9 +28,11 @@ jobs:
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "Github Actions"
-      - name: Run a build
-        run: cd types && yarn build
-      - name: Publish the package
-        run: cd types && yarn publish-types
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Do a patch update for the package
+        run: cd types && yarn version --patch
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          commit-message: update protocol-substrate-types package version
+          title: Update types package version
+          branch: update-types
