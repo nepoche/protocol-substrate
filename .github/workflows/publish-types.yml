@@ -1,3 +1,5 @@
+name: Publish Types
+
 # If changes are made to the types package.json,
 # Issue a new release to npm for the types package.
 
@@ -10,7 +12,6 @@ on:
 
 jobs:
   build:
-    name: Publish Types
     runs-on: ubuntu-latest
     permissions:
       packages: write

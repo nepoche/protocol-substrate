@@ -1,3 +1,5 @@
+name: Bump types package
+
 # If changes are made to the types/src folder,
 # Create a pull request to bump the package.json 
 on:
@@ -9,7 +11,6 @@ on:
 
 jobs:
   build:
-    name: Bump types package
     runs-on: ubuntu-latest
     permissions:
       packages: write
