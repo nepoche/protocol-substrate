@@ -42,4 +42,4 @@ jobs:
       - name: Commit & Push changes
         run: |
           git commit -am "Update protocol-substrate-types"
-          git push
+          git push origin main
