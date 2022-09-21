@@ -1,7 +1,7 @@
 # Protocol Substrate Types
 
 This package is meant to be updated alongside changes to the protocol-substrate runtime.
-
+The package builds the types against the protocol-substrate standalone runtime.
 
 ### Update Types
 
