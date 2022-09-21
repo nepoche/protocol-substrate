@@ -30,7 +30,9 @@ jobs:
       - name: Run a build
         run: cd types && yarn build
       - name: Do a patch update for the package
-        run: cd types && yarn --version patch
+        run: cd types && yarn version --patch
+      # - name: Create Pull Request
+      #   uses: peter-evans/create-pull-request@v4
       - name: Publish the package
         run: cd types && yarn publish-types
         env:
